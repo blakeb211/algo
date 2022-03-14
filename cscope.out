@@ -1,0 +1,117 @@
+cscope 15 $HOME/wrk/competitive-cpp               0000000513
+	@fastscan.cpp
+
+1 
+	~<b™s/¡dc++.h
+>
+
+3 
+usšg
+ 
+	g¡d
+::
+cout
+;
+
+5 
+	$ç¡sÿn
+(&
+numb”
+)
+
+8 
+boÞ
+ 
+Ãg©ive
+ = 
+çl£
+;
+
+9 
+št8_t
+ 
+c
+;
+
+11 
+numb”
+ = 0;
+
+14 
+c
+ = 
+	`g‘ch¬
+();
+
+15 ià(
+c
+=='-')
+
+18 
+Ãg©ive
+ = 
+Œue
+;
+
+21 
+c
+ = 
+	`g‘ch¬
+();
+
+26 ; (
+c
+>47 && c<58); c=
+	`g‘ch¬
+())
+
+27 
+numb”
+ =‚umb” *10 + 
+c
+ - 48;
+
+31 ià(
+Ãg©ive
+)
+
+32 
+numb”
+ *= -1;
+
+33 
+	}
+}
+
+36 
+	$maš
+()
+
+38 
+numb”
+;
+
+39 
+	`ç¡sÿn
+(
+numb”
+);
+
+40 
+cout
+ << 
+numb”
+ << "\n";
+
+42 
+	}
+}
+
+	@
+1
+.
+1
+/usr/include
+1
+13
+fastscan.cpp
