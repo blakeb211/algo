@@ -1,6 +1,18 @@
 #include "SDL.h"
 #include <bits/stdc++.h>
 
+/*******************************************************
+ * TODO:
+ * Read through andrews algorithm in book and online
+ * Sketch out solution
+ * Finish coding
+ ******************************************************/
+
+
+
+
+
+
 using std::ostream, std::cout, std::ios, std::cin,std::vector;
 using std::sort;
 //////////////////////////////////////////////////////////////

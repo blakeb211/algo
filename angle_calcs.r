@@ -14,6 +14,7 @@ rotMat = function(ang) {
 
 a = c(1,2)
 b = c(2,3.5)
-ba = b-a
-rotated = rotMat(90) %*% ba
+ab = b-a
+rotated = rotMat(90) %*% ab
 rotated + b
+
