@@ -2,7 +2,7 @@
 #include <bits/stdc++.h>
 
 using std::ostream, std::cout, std::ios, std::cin,std::vector;
-using std::array, std::sort;
+using std::sort;
 //////////////////////////////////////////////////////////////
 // globals
 //////////////////////////////////////////////////////////////
@@ -24,15 +24,15 @@ struct pt {
 // sorting predicate for pt
 struct less_than
 {
-    inline bool operator() (const pt& p1, const pt& p2)
-    {
-     if (p1.x < p2.x) return true;
-     if (p2.x < p1.x) return false;
-     // p1=p2 for x, go to y
-     if (p1.y < p2.y) return true;
-     if (p2.y < p1.y) return false;
-     return false;
-    }
+  inline bool operator() (const pt& p1, const pt& p2)
+  {
+    if (p1.x < p2.x) return true;
+    if (p2.x < p1.x) return false;
+    // p1=p2 for x, go to y
+    if (p1.y < p2.y) return true;
+    if (p2.y < p1.y) return false;
+    return false;
+  }
 };
 
 //////////////////////////////////////////////////////////////
@@ -51,7 +51,7 @@ pt create_rand_pt(int first, int last) {
 
 // function to determine if points a--b--c create a left hand turn
 bool is_left_turn(pt a, pt b, pt c) {
-   // Calculate the angle formed by 3 points.
+  // Calculate the angle formed by 3 points.
   // e.g. for a---b---c, it is the angle <(ba,bc)
   auto angle_formed = [](pt a, pt b, pt c) {
     pt ba = pt{a.x-b.x, a.y-b.y}; 
@@ -63,7 +63,7 @@ bool is_left_turn(pt a, pt b, pt c) {
     return ans_radians * 180.0 / M_PI;
   };
 
- /* For the convex hull Andrews algorithm, need to be able to check
+  /* For the convex hull Andrews algorithm, need to be able to check
    * if the last 3 points are a left turn or a right turn. If a left
    * turn, throw out the 2nd to last point and start again.
    *
@@ -90,12 +90,24 @@ bool is_left_turn(pt a, pt b, pt c) {
 
 
 
-vector<pt> solve_convex_hull(array<pt, NUM_PT> pts) {
-  vector<pt> soln;
+vector<pt> solve_convex_hull(vector<pt> pts) {
+  vector<pt> soln(NUM_PT);
+  assert(soln.size() == NUM_PT);
   // step 1, sort by x then y
-  sort(pts.begin(), pts.end(), less_than());
   // add first 3 points
   //
+  sort(pts.begin(), pts.end(), less_than());
+  size_t currpt = 0;
+  // add first three points to soln
+  soln.push_back(pts[0]);
+  soln.push_back(pts[1]);
+  soln.push_back(pts[2]);
+  while(0) {
+  
+
+
+  }
+
   return soln;
 
 }
@@ -107,15 +119,19 @@ int main(int argc, char* argv[])
 {
   // random points 
   srand(time(NULL));
-  array<pt,NUM_PT> pts;
-  // soln can't have more points than the pts themselves
-  vector<pt> soln(NUM_PT); 
+  vector<pt> pts(NUM_PT);
 
   for (int i = 0; i < NUM_PT; i++) {
     pts[i] = create_rand_pt(80/SCALE,(600-80)/SCALE);
   }
 
-  soln = solve_convex_hull(pts);
+  vector<pt> soln = solve_convex_hull(pts);
+
+
+  //  // print out pts array
+  //  for (int i = 0; i < NUM_PT; i++) {
+  //    cout << pts[i] << "\n";
+  //  }
 
   // create window and draw solution
 
