@@ -13,7 +13,7 @@ constexpr int SCALE = 4;
 // types
 //////////////////////////////////////////////////////////////
 struct pt {
-  int x, y;
+  float x, y;
   friend ostream& operator<<(ostream& os, const pt& p) {
     os << "x: " << p.x << "\ty:" << p.y;
     return os;
@@ -44,21 +44,53 @@ int rand_num(const int lower, const int upper) {
 }
 
 pt create_rand_pt(int first, int last) {
-  return pt{ rand_num(first,last), rand_num(first,last) };
+  auto num1 = rand_num(first,last);
+  auto num2 = rand_num(first,last);
+  return pt{ static_cast<float>(num1), static_cast<float>(num2) };
 }
 
-vector<pt> solve_convex_hull(array<pt, NUM_PT> pts) {
+// function to determine if points a--b--c create a left hand turn
+bool is_left_turn(pt a, pt b, pt c) {
+   // Calculate the angle formed by 3 points.
+  // e.g. for a---b---c, it is the angle <(ba,bc)
   auto angle_formed = [](pt a, pt b, pt c) {
-    pt ab = pt{b.x-a.x, b.y-a.y}; 
+    pt ba = pt{a.x-b.x, a.y-b.y}; 
     pt bc = pt{c.x-b.x, c.y-b.y}; 
-    int dotprod = ab.x * bc.x + ab.y * bc.y;
-    float lenAB = sqrt(ab.x*ab.x + ab.y*ab.y);
+    float dotprod = ba.x * bc.x + ba.y * bc.y;
+    float lenAB = sqrt(ba.x*ba.x + ba.y*ba.y);
     float lenBC = sqrt(bc.x*bc.x + bc.y*bc.y);
-    float ans_radians = acos( (float)dotprod / lenAB / lenBC);
+    auto ans_radians = acos( (float)dotprod / lenAB / lenBC);
     return ans_radians * 180.0 / M_PI;
   };
 
-  
+ /* For the convex hull Andrews algorithm, need to be able to check
+   * if the last 3 points are a left turn or a right turn. If a left
+   * turn, throw out the 2nd to last point and start again.
+   *
+   * create a perpendicular line to the right of the ab.
+   * transform ab with the rotation matrix.
+   * add b to the transformed coordinates to get d, the point
+   * out 90 degrees clockwise to a-b.
+   * calculate angle <dbc. If that is less than or equal
+   * to 90, it is a righthand turn.*/
+
+  pt ab{b.x - a.x, b.y - a.y};
+  // The 90 degrees clockwise rotation matrix is 
+  //  0   1
+  // -1   0
+  //  Obtain d by rotating ab 90 degrees clockwise and adding
+  //  it to point b.
+  pt d{ab.y + b.x, -ab.x + b.y};
+  // If the angle formed by dbc is <= 90, its a right hand turn or
+  // abc is a straight line. 
+  // Convex hulls are made from all right hand turns.
+  // If the angle formed is > 90, it is a left turn.
+  return angle_formed(d,b,c) > 90.f;
+} 
+
+
+
+vector<pt> solve_convex_hull(array<pt, NUM_PT> pts) {
   vector<pt> soln;
   // step 1, sort by x then y
   sort(pts.begin(), pts.end(), less_than());
