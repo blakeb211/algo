@@ -3,7 +3,7 @@ library(ggplot2)
 # clear objects
 rm(list = ls())
 pts = list()
-length(pts) = 60 
+length(pts) = 30 
 
 rnd = function() {
   # random number in specified range
@@ -18,8 +18,10 @@ generate_rand_2vecs = function(pts) {
 }
 pts = generate_rand_2vecs(pts)
 df = data.frame(data = pts)
+# remove any duplicate points, which will break the algo
+df = df[!duplicated(df),]
 df = df %>% t
-rownames(df) = 1:length(pts)
+rownames(df) = 1:length(df[,1])
 colnames(df) = c("x", "y")
 rm(pts)
 print(df)
@@ -50,7 +52,7 @@ rotMat = function(ang) {
 sort.less.than = function(df) {
   #return(df[order(df$x,df$y),])
   df = df[order(df$y,decreasing = TRUE),]
-  df = df[order(df$x),]
+  df = df[order(df$x,decreasing = FALSE),]
   return(df)
   #return(df[order(df$x,df$y),])
 }
@@ -72,10 +74,15 @@ angle.formed = function(a,b,c) {
   return(angRad %>% rad2deg)
 }
 is.left.turn = function(a,b,c) {
+  stopifnot(length(a) == 2 && typeof(a) == "double")   
+  stopifnot(length(b) == 2 && typeof(b) == "double")   
+  stopifnot(length(c) == 2 && typeof(c) == "double")   
   ab = b - a
   rotated = rotMat(90) %*% ab
   d = rotated + b
-  return(angle.formed(d,b,c) > 90.0)
+  angformed = angle.formed(d,b,c)
+  if(is.nan(angformed)) return(TRUE)
+  return(angformed > 90.0)
 }
 add.pt = function(df, soln, currIndex) {
   rbind(soln, selectV2(df,currIndex)) 
@@ -100,30 +107,26 @@ solve.convex.hull = function(upper=TRUE) {
   # add a point
   # check if left turn
   # if left turn, remove 2nd to last point in soln
-  last.pt.added.to.soln = c(-1,-1)
   while (curridx <= length(df[, 1])) {
     soln = add.pt(df, soln, curridx)
-    last.pt.added.to.soln = soln[length(soln[,1]),]
     # Remove 2nd to last point if a left hand turn is 
     # formed by the last 3 points in the solution.
     # Continue removing until either they form a right hand turn
     # or there are only 2 points in the solution.
     while (1) {
       lenSoln = length(soln[, 1])
-      if (lenSoln < 3) break;
+      if (lenSoln < 3) break
+      removeFlag=FALSE
       removeFlag = is.left.turn(soln[lenSoln - 2, ],
                                 soln[lenSoln - 1, ],
                                 soln[lenSoln - 0, ])
-      if (!removeFlag) break;
+      if (removeFlag == FALSE) break;
         # remove 2nd to last point
         soln = soln[-(lenSoln - 1), ]
     }
     curridx = curridx + 1
   }
   colnames(soln) = c("x", "y")
-  if (upper==FALSE) {
-  print(last.pt.added.to.soln)
-  }
   data.frame(soln)
 }
 
