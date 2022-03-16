@@ -11,11 +11,6 @@ struct pt {
   // comparator
 };
 
-
-// function to determine if points a--b--c create a left hand turn
-bool is_left_turn(pt a, pt b, pt c) {
-  // Calculate the angle formed by 3 points.
-  // e.g. for a---b---c, it is the angle <(ba,bc)
   auto angle_formed = [](pt a, pt b, pt c) {
     pt ba = pt{a.x-b.x, a.y-b.y}; 
     pt bc = pt{c.x-b.x, c.y-b.y}; 
@@ -25,6 +20,11 @@ bool is_left_turn(pt a, pt b, pt c) {
     auto ans_radians = acos( (float)dotprod / lenAB / lenBC);
     return ans_radians * 180.0 / M_PI;
   };
+
+// function to determine if points a--b--c create a left hand turn
+bool is_left_turn(pt a, pt b, pt c) {
+  // Calculate the angle formed by 3 points.
+  // e.g. for a---b---c, it is the angle <(ba,bc)
 
   /* For the convex hull Andrews algorithm, need to be able to check
    * if the last 3 points are a left turn or a right turn. If a left
@@ -60,6 +60,7 @@ int main() {
   pt b{2,3.5};
   pt c{1.5, 4.5};
 
+  cout << angle_formed(a,b,c) << endl;
   cout << is_left_turn(a,b,c) << endl;
 
 
