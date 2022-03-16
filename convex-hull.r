@@ -3,7 +3,7 @@ library(ggplot2)
 # clear objects
 rm(list = ls())
 pts = list()
-length(pts) = 30 
+ length(pts) = 30 
 
 rnd = function() {
   # random number in specified range
