@@ -20,6 +20,7 @@ using std::sort;
 //////////////////////////////////////////////////////////////
 constexpr size_t NUM_PT = 11;
 constexpr int SCALE = 4;
+constexpr int WINDIM = 600;
 
 //////////////////////////////////////////////////////////////
 // types
@@ -105,20 +106,39 @@ bool is_left_turn(pt a, pt b, pt c) {
 vector<pt> solve_convex_hull(vector<pt> pts) {
   vector<pt> soln(NUM_PT);
   assert(soln.size() == NUM_PT);
+  soln.resize(0);
   // step 1, sort by x then y
   // add first 3 points
-  //
+  // Loop:
+  // if left_turn == 1, remove 2nd to last point
+  // add a point
+  // go until no more pts
   sort(pts.begin(), pts.end(), less_than());
-  size_t currpt = 0;
+  //  print out sorted pts array
+  cout << "SORTED POINTS:\n";
+  for (int i = 0; i < NUM_PT; i++)
+    cout << pts[i] << "\n";
+  size_t nextpt = 0;
   // add first three points to soln
   soln.push_back(pts[0]);
   soln.push_back(pts[1]);
-  soln.push_back(pts[2]);
-  while(0) {
-  
-
-
+  nextpt = 2;
+  while(nextpt != pts.size()+1) {
+    soln.push_back(pts[nextpt]);
+    auto sz = soln.size();
+    if (is_left_turn(soln[sz-3],soln[sz-2],soln[sz-1]))
+      soln.erase(soln.end()-2);
+    nextpt++;
   }
+  // do one final check in case the last point added was bad
+  auto sz = soln.size();
+  if (is_left_turn(soln[sz-3],soln[sz-2],soln[sz-1]))
+    soln.erase(soln.end()-2);
+
+  //  print out soln array
+  cout << "SOLUTION POINTS (" << soln.size() << "%ld):\n";
+  for (int i = 0; i < soln.size(); i++)
+    cout << soln[i] << "\n";
 
   return soln;
 
@@ -134,16 +154,12 @@ int main(int argc, char* argv[])
   vector<pt> pts(NUM_PT);
 
   for (int i = 0; i < NUM_PT; i++) {
-    pts[i] = create_rand_pt(80/SCALE,(600-80)/SCALE);
+    pts[i] = create_rand_pt(80/SCALE,(WINDIM-80)/SCALE);
   }
 
   vector<pt> soln = solve_convex_hull(pts);
 
 
-  //  // print out pts array
-  //  for (int i = 0; i < NUM_PT; i++) {
-  //    cout << pts[i] << "\n";
-  //  }
 
   // create window and draw solution
 
@@ -151,7 +167,7 @@ int main(int argc, char* argv[])
     SDL_Window* window = NULL;
     SDL_Renderer* renderer = NULL;
 
-    if (SDL_CreateWindowAndRenderer(600, 600, 0, &window, &renderer) == 0) {
+    if (SDL_CreateWindowAndRenderer(WINDIM, WINDIM, 0, &window, &renderer) == 0) {
       SDL_bool done = SDL_FALSE;
 
       SDL_RenderSetScale(renderer, SCALE, SCALE);
@@ -161,24 +177,20 @@ int main(int argc, char* argv[])
 
         SDL_SetRenderDrawColor(renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
         SDL_RenderClear(renderer);
-        SDL_SetRenderDrawColor(renderer, 255, 255, 255, SDL_ALPHA_OPAQUE);
-
-        // draw the points
-        for (int i = 0; i < NUM_PT; i++) 
-          SDL_RenderDrawPoint(renderer, pts[i].x, pts[i].y);
 
         // draw the solution
         SDL_SetRenderDrawColor(renderer, 100, 5, 200, SDL_ALPHA_OPAQUE);
-        auto num_lines = soln.size();
-        for (int i = 0; i < num_lines; i++) {
-          if (i != num_lines - 1) {
-            SDL_RenderDrawLine(renderer, soln[i].x, soln[i].y, \
-                soln[i+1].x, soln[i+1].y);
-          } else {
-            SDL_RenderDrawLine(renderer, soln[i].x, soln[i].y, \
-                soln[0].x, soln[0].y);
-          }
+        auto num_lines = soln.size() - 1;
+        // a---b---c----d
+        for (int i = 0; i < num_lines -1; i++) {
+          SDL_RenderDrawLine(renderer, soln[i].x, WINDIM/SCALE-soln[i].y, \
+              soln[i+1].x, WINDIM/SCALE-soln[i+1].y);
         }
+       
+        // draw the points
+        SDL_SetRenderDrawColor(renderer, 255, 255, 255, SDL_ALPHA_OPAQUE);
+        for (int i = 0; i < NUM_PT; i++) 
+          SDL_RenderDrawPoint(renderer, pts[i].x, WINDIM/SCALE-pts[i].y);
 
         SDL_RenderPresent(renderer);
 
