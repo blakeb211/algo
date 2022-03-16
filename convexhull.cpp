@@ -5,12 +5,9 @@
  * TODO:
  * Read through andrews algorithm in book and online
  * Sketch out solution
- * Finish coding
+ * Prototype in R
+ * Write in C++
  ******************************************************/
-
-
-
-
 
 
 using std::ostream, std::cout, std::ios, std::cin,std::vector;
@@ -154,7 +151,7 @@ int main(int argc, char* argv[])
   vector<pt> pts(NUM_PT);
 
   for (int i = 0; i < NUM_PT; i++) {
-    pts[i] = create_rand_pt(80/SCALE,(WINDIM-80)/SCALE);
+    pts[i] = create_rand_pt(100/SCALE,(WINDIM-100)/SCALE);
   }
 
   vector<pt> soln = solve_convex_hull(pts);
