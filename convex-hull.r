@@ -48,10 +48,17 @@ rotMat = function(ang) {
   return(res)
 }
 sort.less.than = function(df) {
-  return(df[order(df$x,df$y),])
+  #return(df[order(df$x,df$y),])
+  df = df[order(df$y,decreasing = TRUE),]
+  df = df[order(df$x),]
+  return(df)
+  #return(df[order(df$x,df$y),])
 }
 sort.greater.than = function(pts) {
-  return(df[order(df$x,df$y,decreasing = TRUE),])
+  df = df[order(df$y, decreasing = FALSE),]
+  df = df[order(df$x, decreasing = TRUE),]
+  return(df)
+  #return(df[order(df$x,df$y,decreasing = TRUE),])
 }
 angle.formed = function(a,b,c) {
   # angle in degrees formed by three 2-vectors
@@ -114,7 +121,7 @@ solve.convex.hull = function(upper=TRUE) {
     curridx = curridx + 1
   }
   colnames(soln) = c("x", "y")
-  if (upper==TRUE) {
+  if (upper==FALSE) {
   print(last.pt.added.to.soln)
   }
   data.frame(soln)
@@ -140,6 +147,7 @@ test.convex.hull = function() {
 soln.upper = solve.convex.hull(upper=TRUE)
 soln.lower = solve.convex.hull(upper=FALSE)
 
+cols = c("blue" = "blue")
 # plotting the result
 ggplot() +
   layer(
@@ -153,16 +161,15 @@ ggplot() +
   ylim(c(0, 150)) + 
   layer(
     data = soln.upper, 
-    mapping = aes(x = x, y = y,color="red"),
     stat = "identity",
     position = "identity",
-    geom = "line"
+    geom = "path",
+    mapping = aes(x = x, y = y),
   ) + 
   layer(
     data = soln.lower, 
     mapping = aes(x = x, y = y),
     stat = "identity",
     position = "identity",
-    geom = c("line")
-  )
-
+    geom = c("path")
+  ) 
