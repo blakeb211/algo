@@ -3,7 +3,7 @@ library(ggplot2)
 # clear objects
 rm(list = ls())
 pts = list()
-length(pts) = 12
+length(pts) = 60 
 
 rnd = function() {
   # random number in specified range
@@ -19,9 +19,9 @@ generate_rand_2vecs = function(pts) {
 pts = generate_rand_2vecs(pts)
 df = data.frame(data = pts)
 df = df %>% t
-rm(pts)
-rownames(df) = 1:12
+rownames(df) = 1:length(pts)
 colnames(df) = c("x", "y")
+rm(pts)
 print(df)
 df = data.frame(df)
 
