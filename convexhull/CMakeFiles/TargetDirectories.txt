@@ -1,4 +1,0 @@
-/home/bb/wrk/competitive-cpp/convexhull/CMakeFiles/ConvexHull.dir
-/home/bb/wrk/competitive-cpp/convexhull/CMakeFiles/test.dir
-/home/bb/wrk/competitive-cpp/convexhull/CMakeFiles/edit_cache.dir
-/home/bb/wrk/competitive-cpp/convexhull/CMakeFiles/rebuild_cache.dir

@@ -1,1 +1,0 @@
-/usr/bin/c++ CMakeFiles/ConvexHull.dir/convexhull.cpp.o -o ConvexHull  -lSDL2main -lSDL2 
