@@ -4,7 +4,7 @@ cmake_minimum_required(VERSION 3.22)
 project(ConvexHull)
 
 # add executable
-add_executable(ConvexHull convexhull.cpp)
+add_executable(ConvexHull main.cpp convexlib.cpp)
 set_property(TARGET ConvexHull PROPERTY CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
@@ -16,3 +16,6 @@ target_include_directories(ConvexHull PUBLIC
                           "${PROJECT_BINARY_DIR}" 
                           ${EXTRA_INCLUDES})
 
+# testing
+enable_testing()
+add_test(NAME Runs COMMAND ConvexHull)
