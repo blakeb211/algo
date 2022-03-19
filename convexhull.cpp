@@ -3,9 +3,6 @@
 
 /*******************************************************
  * TODO:
- * Read through andrews algorithm in book and online
- * Sketch out solution
- * Prototype in R
  * Write in C++
  ******************************************************/
 
@@ -28,7 +25,12 @@ struct pt {
     os << "x: " << p.x << "\ty:" << p.y;
     return os;
   }
-  // comparator
+  pt operator+(const pt& p) {
+    return pt{p.x + x, p.y + y};
+  }
+  pt operator-(const pt& p) {
+    return pt{x - p.x, y - p.y};
+  }
 };
 
 // sorting predicate for pt
