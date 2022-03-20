@@ -26,4 +26,4 @@ target_include_directories(testbed PUBLIC
 
 # testing
 enable_testing()
-add_test(NAME Runs COMMAND testbed "-1") 
+add_test(NAME Testrnd COMMAND testbed -1) 

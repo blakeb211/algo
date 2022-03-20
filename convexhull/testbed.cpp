@@ -1,14 +1,25 @@
 #include <bits/stdc++.h>
-#include <unistd.h>
+#include <getopt.h>
 
 #include "convexlib.h"
 
 using std::vector, std::cout, std::stoi, std::endl;
 
-bool test_rnd() {
-  int ans = rand_num(1, 5);
-  if (ans >= 1 && ans <= 5) return true;
-  return false;
+// function stops program execution if assert fails 
+void test_rnd() {
+  srand(time(NULL));
+  const int LOWER = 1;
+  const int UPPER = 10;
+  bool lower_end_hit = false;
+  bool upper_end_hit = false;
+  for (int i = 0; i < 10'000; i++) {
+    int ans = rand_num(LOWER, UPPER);
+    if (ans == LOWER) lower_end_hit = true;
+    if (ans == UPPER) upper_end_hit = true;
+    assert(ans >= LOWER && ans <= UPPER);
+  }
+  assert(lower_end_hit && upper_end_hit);
+  assert(0);
 }
 
 /*************************************************
@@ -26,7 +37,9 @@ int main(int argc, char *const *argv) {
     switch (c) {
       case '1': {
         cout << "running test_rnd()" << endl;
-        return test_rnd();
+        // if testrnd's asserts pass then the test
+        // was successful
+        test_rnd();
         break;
       }
       case '2': {
