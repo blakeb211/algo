@@ -92,10 +92,6 @@ vector<pt> solve_convex_hull(vector<pt> pts, const bool UPPER) {
     }
     nextpt++;
   }
-  //  print out soln array
-  cout << "SOLUTION POINTS (" << soln.size() << "):\n";
-  for (int i = 0; i < soln.size(); i++)
-    cout << soln[i] << "\n";
 
   return soln;
 }

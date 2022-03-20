@@ -32,6 +32,14 @@ int main(int argc, char* argv[])
 
   vector<pt> soln1 = solve_convex_hull(pts, true);
   vector<pt> soln2 = solve_convex_hull(pts, false);
+  
+  //  print out soln array
+  cout << "UPPER SOLUTION POINTS (" << soln1.size() << "):\n";
+  for (const auto i : soln1)
+    cout << i << "\n";
+  cout << "LOWER SOLUTION POINTS (" << soln2.size() << "):\n";
+  for (const auto i : soln2)
+    cout << i << "\n";
 
   // create window and draw solution
   if (SDL_Init(SDL_INIT_VIDEO) == 0) {
