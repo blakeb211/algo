@@ -13,8 +13,14 @@
    source("filename.r")
    ```
    For c++ examples, first make sure **sdl2-dev** is installed. Then either modify the 
-   *build.sh* script or go to the **build** directory and type: 
+   *build.sh* script or create a **build** directory build with cmake by typing: 
    ``` 
+   mkdir build
+   cd build
    cmake ..
    make
+   ```
+   You can test with
+   ```
+   make test
    ```
