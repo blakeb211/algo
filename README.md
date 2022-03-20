@@ -1,5 +1,4 @@
 ## Demonstrations of different interesting algorithms
-
 1. Andrew's Algorithm for finding the polygon that outlines or bounds
    a set of a points.
    - R version   : complete
@@ -12,8 +11,9 @@
    R
    source("filename.r")
    ```
-   For c++ examples, first make sure **sdl2-dev** is installed. Then either modify the 
-   *build.sh* script or create a **build** directory and build with cmake by typing: 
+   For c++ examples, first make sure **sdl2-dev** is installed. 
+   Go into an individual example, then either modify the *build.sh* 
+   script or create a **build** directory and build with cmake by typing:
    ``` 
    mkdir build
    cd build
@@ -24,3 +24,6 @@
    ```
    make test
    ```
+## Templates Directory
+   Contains templates to easily create additional examples that include an
+   SDL visualization window and a ctest testbed.
