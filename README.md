@@ -7,15 +7,14 @@
    <img src="screenshots/convexhull/1.png" width=50% height=50%>
 
 ## Build instructions
-   - For R examples, run directly in R using either 
+   - For R examples, either open in RStudio, or open file in R by typing:
    ```
-      R
-      source("filename.r")
+   R
+   source("filename.r")
    ```
-     or opening the file in RStudio.
-   - For c++ examples, install SDL2, go to the build directory and type: 
+   - For c++ examples, first make sure SDL2-dev is installed. Then either modify the 
+   *build.sh* script or go to the **build** directory and type: 
    ``` 
-       cmake ..
-       make
+   cmake ..
+   make
    ```
-     or modify the *build.sh* script to suit your purposes.
