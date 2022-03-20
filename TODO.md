@@ -1,7 +1,6 @@
 ## TODO
-  - add testing to c++ version of convexhull
-  - create unit tests for CH functions
-
+  - add tests to c++ version of convexhull
 
 ## DONE
   - create working prototype for convexhull in R
+  - get c++ version working
