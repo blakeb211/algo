@@ -12,7 +12,7 @@
    R
    source("filename.r")
    ```
-   - For c++ examples, first make sure SDL2-dev is installed. Then either modify the 
+   - For c++ examples, first make sure **sdl2-dev** is installed. Then either modify the 
    *build.sh* script or go to the **build** directory and type: 
    ``` 
    cmake ..
