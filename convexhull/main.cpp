@@ -2,11 +2,6 @@
 #include <bits/stdc++.h>
 #include "convexlib.h"
 
-/*******************************************************
- * TODO:
- * Write in C++
- ******************************************************/
-
 using std::ostream, std::cout, std::ios, std::cin,std::vector;
 using std::sort;
 
