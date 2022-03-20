@@ -16,10 +16,10 @@ void test_rnd() {
     int ans = rand_num(LOWER, UPPER);
     if (ans == LOWER) lower_end_hit = true;
     if (ans == UPPER) upper_end_hit = true;
+    // cout << ans << endl;
     assert(ans >= LOWER && ans <= UPPER);
   }
   assert(lower_end_hit && upper_end_hit);
-  assert(0);
 }
 
 /*************************************************
