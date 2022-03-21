@@ -4,6 +4,8 @@
    - R version   : complete
    - C++ version : working 
    <img src="screenshots/convexhull/1.png" width=50% height=50%>
+2. Point-in-polygon algorithm for quickly determining if a point
+   is contained within a given polygon.
 
 ## Build instructions
    For R examples, either open in RStudio, or open file in R by typing:
