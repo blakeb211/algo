@@ -49,5 +49,21 @@ auto main() -> int {
   // two input vectors
   print_vecpi(c);
 
+  // reduce first, last, init, binary_op
+  // default std::reduce sums the elements
+  cout << "std::reduce a: " << std::reduce(a.begin(), a.end(), 0) << endl;
+
+  // implement RMS with transform_reduce
+  // transform_reduce. args: first last first_2 init reduce_op transform_op
+  vi d;
+  d.resize(5);
+  std::iota(d.begin(), d.end(), 1);
+
+  // rms is defined as sqrt(sum(x^2)/N)
+  auto sum_squares = std::transform_reduce(d.begin(), d.end(), d.begin(), 0,
+                                           std::plus{}, std::multiplies{});
+  auto rms = sqrt(sum_squares / d.size());
+  cout << "sum squares expected: 55 actual: " << sum_squares << endl
+       << "rms expected: 3.316625 actual: " << rms << endl;
   return 0;
 }
