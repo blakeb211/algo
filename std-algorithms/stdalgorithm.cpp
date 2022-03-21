@@ -12,7 +12,6 @@
 //      reduce
 //
 #include <bits/stdc++.h>
-
 using vi = std::vector<int>;
 using vpi = std::vector<std::pair<int, int>>;
 using std::cout, std::endl, std::vector;
@@ -91,7 +90,6 @@ auto demo3_adjacent_difference() -> void {
   std::adjacent_difference(a.begin(), a.end(), b.begin(), std::minus{});
   print_veci(b);
 }
-
 
 auto main() -> int {
   demo1_create_pairs();
