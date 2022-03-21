@@ -1,4 +1,16 @@
 // std algorithm scratch file
+//
+// TODO:
+//      inclusive_scan
+//      exclusive_scan
+//      count_if
+//      nth_element
+//
+// Examples below for:
+//      transform_reduce
+//      transform
+//      reduce
+//
 #include <bits/stdc++.h>
 
 using vi = std::vector<int>;
@@ -17,7 +29,7 @@ auto print_vecpi(vpi in) -> void {
   cout << endl;
 }
 
-auto main() -> int {
+auto demo1_create_pairs() -> void {
   vi a;
   a.resize(20);
   std::iota(a.begin(), a.end(), 1);
@@ -51,8 +63,11 @@ auto main() -> int {
 
   // reduce first, last, init, binary_op
   // default std::reduce sums the elements
+  // but can do a different operation too
   cout << "std::reduce a: " << std::reduce(a.begin(), a.end(), 0) << endl;
+}
 
+auto demo2_rms_with_transform_reduce() -> void {
   // implement RMS with transform_reduce
   // transform_reduce. args: first last first_2 init reduce_op transform_op
   vi d;
@@ -65,5 +80,22 @@ auto main() -> int {
   auto rms = sqrt(sum_squares / d.size());
   cout << "sum squares expected: 55 actual: " << sum_squares << endl
        << "rms expected: 3.316625 actual: " << rms << endl;
+}
+
+auto demo3_adjacent_difference() -> void {
+  // adjacent_difference args: first, last, first_2, binary_op
+  vi a{1, 2, 12, 22, 5};
+  vi b(a.size());
+  cout << "adjacent difference result" << endl;
+  print_veci(a);
+  std::adjacent_difference(a.begin(), a.end(), b.begin(), std::minus{});
+  print_veci(b);
+}
+
+
+auto main() -> int {
+  demo1_create_pairs();
+  demo2_rms_with_transform_reduce();
+  demo3_adjacent_difference();
   return 0;
 }
