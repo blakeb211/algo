@@ -13,11 +13,13 @@ cross = function(a, b) {
 
 # determine if a point is on left of a line
 is_on_left = function(p,s1,s2) {
-  if (cross(p-s1,p-s2) > 0) return(true) 
+  if (cross(p-s1,p-s2) > 0) return(TRUE) 
+  return(FALSE)
 }
 # determine if a point is on right of a line
 is_on_right = function(p,s1,s2) {
-  if (cross(p-s1,p-s2) < 0) return(true) 
+  if (cross(p-s1,p-s2) < 0) return(TRUE) 
+  return(FALSE)
 }
 
 two.segment.intersect = function(a, b,c,d) {
@@ -60,9 +62,21 @@ xlonepoint = c(2.5)
 ylonepoint = c(4)
 df3 = c(xlonepoint,ylonepoint) %>% t %>% data.frame
 colnames(df3) = c("xlonepoint","ylonepoint")
+p = c(xlonepoint,ylonepoint)
 
 xpoly = c(1, 1, 1, 1)
 ypoly = c(1, 1, 1, 1)
+
+#########################################
+# Demo 1: which side of blue line is red 
+#         point on
+#########################################
+s1 = c(xsegs2[[1]],ysegs2[[1]])
+s2 = c(xsegs2[[2]],ysegs2[[2]])
+cat("Demo1: is_on_left(p,s1,s2)\nexpected = TRUE")
+cat("result =", is_on_left(p,s1,s2), "\n")
+cat("Demo2: is_on_right(p,s1,s2)\nexpected = FALSE")
+cat("result =", is_on_right(p,s1,s2), "\n")
 
 #######################################
 # Visualize result
@@ -89,3 +103,4 @@ ggplot() +
   theme(legend.position = "none") +
   xlab("x coord") + ylab("y coord") +
   scale_color_manual(values = ptcol) 
+
