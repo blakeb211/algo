@@ -200,5 +200,9 @@ two.segment.intersect(a,b,c,d)
 # add visualization for several segments that do and do not 
 # intersect a polygon; write function that takes a polygon and a segment
 # and says whether it intersects or not
-xpoly = c(1, 1, 1, 1)
-ypoly = c(1, 1, 1, 1)
+xs = strsplit("1 1 1 1",' ') %>% unlist %>% as.double
+ys = strsplit("2 4 3 2", ' ') %>% unlist %>% as.double
+xpoly
+ypoly
+data.frame(cbind(xpoly,ypoly))
+visualize.poly = function() {}
