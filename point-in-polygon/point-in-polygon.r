@@ -49,6 +49,8 @@ two.segment.intersect = function(a, b,c,d) {
     pts = pts[order(pts$x, decreasing = TRUE), ]
     # check if either first two points or last two points
     # equal the points of one of the line segments
+    # @NOTE: this == should be fine since we are doing equality of 
+    # a float with itself, not a float with a different float 
     seg1 = rbind(a,b)
     check1 = sum(seg1 == pts[3:4,]) == 4 || sum(seg1 == pts[1:2,]) == 4
     # check if either first two points or last two points
@@ -58,22 +60,40 @@ two.segment.intersect = function(a, b,c,d) {
     if (check1 || check2 == TRUE) {
       print("case1 intersect not detected")
     } else {
-      print("case1 intersect detected")
+      print("case1 (overlapping segments w/ same angle) intersect detected")
     }
   }
   # Case 2: line segments have a common vertex that is
   # the only intersection point
-  
+  # check if a == c, a == d, b == c, or b == d
+  if (a == c || a == d || b == c || b == d) {
+    print("case2 (shared vertex) intersect detected")
+  } else {
+    print("case2 intersect not detected")
+  }  
+  # Case 3: a--b and c--d intersect at exactly one 
+  # non-vertex point 
+  # a and b are on diff sides of line c--d. also points c and d are on 
+  # diff sides of a line through a--b.
+  check1 = (is_on_left(a, c, d) && is_on_right(b, c, d)) ||  
+           (is_on_left(b, c, d) && is_on_right(a, c, d))
+  check2 = (is_on_left(c, a, b) && is_on_right(d, a, b)) ||  
+           (is_on_left(d, a, b) && is_on_right(c, a, b))
+  if (check1 && check2) {
+    print("case3 non-vertex intersect at single point")
+  } else {
+    print("case3 intersect not detected") 
+  }
 }
 
 #######################################
 # Setup the data
 #######################################
-xsegs1 = c(3, 1)
+xsegs1 = c(3, 5)
 ysegs1 = c(3, 1)
 df1 = cbind(xsegs1, ysegs1) %>% data.frame
-xsegs2 = c(4, 5)
-ysegs2 = c(4, 5)
+xsegs2 = c(2, 5)
+ysegs2 = c(2, 5)
 df2 = cbind(xsegs2, ysegs2) %>% data.frame
 
 xlonepoint = c(2.5)
