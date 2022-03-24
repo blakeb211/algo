@@ -16,6 +16,7 @@ is_on_left = function(p,s1,s2) {
   if (cross(p-s1,p-s2) > 0) return(TRUE) 
   return(FALSE)
 }
+
 # determine if a point is on right of a line
 is_on_right = function(p,s1,s2) {
   if (cross(p-s1,p-s2) < 0) return(TRUE) 
@@ -57,10 +58,10 @@ two.segment.intersect = function(a, b,c,d) {
     # equal the points of one of the line segments *in reversed order* 
     seg1 = rbind(b,a)
     check2 = sum(seg1 == pts[3:4,]) == 4 || sum(seg1 == pts[1:2,]) == 4
-    if (check1 && check2 == FALSE) {
-      print("case1 (overlapping segments w/ same angle) intersect detected")
-    } else {
+    if (check1 || check2 == TRUE) {
       print("case1 intersect not detected")
+    } else {
+      print("case1 (overlapping segments w/ same angle) intersect detected")
     }
   } else {
       print("case1 intersect not detected")
@@ -89,53 +90,16 @@ two.segment.intersect = function(a, b,c,d) {
 }
 
 #######################################
-# Setup the data
-#######################################
-xsegs1 = c(3, 5)
-ysegs1 = c(3, 1)
-df1 = cbind(xsegs1, ysegs1) %>% data.frame
-xsegs2 = c(2, 5)
-ysegs2 = c(2, 5)
-df2 = cbind(xsegs2, ysegs2) %>% data.frame
-
-xlonepoint = c(2.5)
-ylonepoint = c(4)
-df3 = c(xlonepoint,ylonepoint) %>% t %>% data.frame
-colnames(df3) = c("xlonepoint","ylonepoint")
-p = c(xlonepoint,ylonepoint)
-
-
-#########################################
-# which side of blue line is red 
-# point on
-#########################################
-s1 = c(xsegs2[[1]],ysegs2[[1]])
-s2 = c(xsegs2[[2]],ysegs2[[2]])
-cat("Demo1: is_on_left(p,s1,s2)\nexpected = TRUE")
-cat("result =", is_on_left(p,s1,s2), "\n")
-cat("Demo2: is_on_right(p,s1,s2)\nexpected = FALSE")
-cat("result =", is_on_right(p,s1,s2), "\n")
-
-########################################
-# intersection test
-########################################
-a = s1
-b = s2
-c = c(xsegs1[[1]],ysegs1[[1]])
-d = c(xsegs1[[2]],ysegs1[[2]])
-two.segment.intersect(a,b,c,d)
-########################################
-# Segment intersect polygon
-########################################
-xpoly = c(1, 1, 1, 1)
-ypoly = c(1, 1, 1, 1)
-#######################################
 # Visualize result
 #######################################
+visualize = function(xsegs1, ysegs1, xsegs2, ysegs2,xlonepoint,ylonepoint) {
+df1 = cbind(xsegs1, ysegs1) %>% data.frame
+df2 = cbind(xsegs2, ysegs2) %>% data.frame
+df3 = c(xlonepoint,ylonepoint) %>% t %>% data.frame
 ptcol = c("1" = "springgreen3", "2" = "blue4", "3" = "orangered3")
 ggplot() +
-  xlim(c(0, 10)) +
-  ylim(c(0, 10)) +
+  xlim(c(-3, 10)) +
+  ylim(c(-3, 10)) +
   layer(
     data = df1,
     mapping = aes(x = xsegs1, y = ysegs1, color = "1"),
@@ -154,4 +118,66 @@ ggplot() +
   theme(legend.position = "none") +
   xlab("x coord") + ylab("y coord") +
   scale_color_manual(values = ptcol) 
+}
+#########################################
+# which side of blue line is red 
+# point on
+#########################################
+xsegs1 = c(3, 5)
+ysegs1 = c(4, 1)
+xsegs2 = c(2, 5)
+ysegs2 = c(2, 5)
+xlonepoint = c(2.5)
+ylonepoint = c(4)
+colnames(df3) = c("xlonepoint","ylonepoint")
+p = c(xlonepoint,ylonepoint)
+s1 = c(xsegs2[[1]],ysegs2[[1]])
+s2 = c(xsegs2[[2]],ysegs2[[2]])
+cat("Demo1: is_on_left(p,s1,s2)\nexpected = TRUE")
+cat("result =", is_on_left(p,s1,s2), "\n")
+cat("Demo2: is_on_right(p,s1,s2)\nexpected = FALSE")
+cat("result =", is_on_right(p,s1,s2), "\n")
 
+########################################
+# intersection test 1
+########################################
+a = c(xsegs2[[1]],ysegs2[[1]])
+b = c(xsegs2[[2]],ysegs2[[2]])
+c = c(xsegs1[[1]],ysegs1[[1]])
+d = c(xsegs1[[2]],ysegs1[[2]])
+two.segment.intersect(a,b,c,d)
+visualize(xsegs1,ysegs1,xsegs2,ysegs2,xlonepoint,ylonepoint)
+
+########################################
+# intersection test 2
+########################################
+xsegs1 = c(-1,6)
+ysegs1 = c(0, 4)
+xsegs2 = c(-1, 5)
+ysegs2 = c(0, 4)
+a = c(xsegs2[[1]],ysegs2[[1]])
+b = c(xsegs2[[2]],ysegs2[[2]])
+c = c(xsegs1[[1]],ysegs1[[1]])
+d = c(xsegs1[[2]],ysegs1[[2]])
+visualize(xsegs1,ysegs1,xsegs2,ysegs2,xlonepoint,ylonepoint)
+two.segment.intersect(a,b,c,d)
+
+########################################
+# intersection test 3
+########################################
+xsegs1 = c(0,2)
+ysegs1 = c(0,2)
+xsegs2 = c(1, 3)
+ysegs2 = c(1, 3)
+a = c(xsegs2[[1]],ysegs2[[1]])
+b = c(xsegs2[[2]],ysegs2[[2]])
+c = c(xsegs1[[1]],ysegs1[[1]])
+d = c(xsegs1[[2]],ysegs1[[2]])
+visualize(xsegs1,ysegs1,xsegs2,ysegs2,xlonepoint,ylonepoint)
+two.segment.intersect(a,b,c,d)
+
+########################################
+# Segment intersect polygon
+########################################
+xpoly = c(1, 1, 1, 1)
+ypoly = c(1, 1, 1, 1)
