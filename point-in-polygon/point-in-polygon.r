@@ -139,7 +139,7 @@ cat("Demo2: is_on_right(p,s1,s2)\nexpected = FALSE")
 cat("result =", is_on_right(p,s1,s2), "\n")
 
 ########################################
-# intersection test 1
+# intersection test 1 (blue and green segments)
 ########################################
 a = c(xsegs2[[1]],ysegs2[[1]])
 b = c(xsegs2[[2]],ysegs2[[2]])
@@ -149,7 +149,7 @@ two.segment.intersect(a,b,c,d)
 visualize(xsegs1,ysegs1,xsegs2,ysegs2,xlonepoint,ylonepoint)
 
 ########################################
-# intersection test 2
+# intersection test 2 (blue and green segments)
 ########################################
 xsegs1 = c(-1,6)
 ysegs1 = c(0, 4)
@@ -163,12 +163,26 @@ visualize(xsegs1,ysegs1,xsegs2,ysegs2,xlonepoint,ylonepoint)
 two.segment.intersect(a,b,c,d)
 
 ########################################
-# intersection test 3
+# intersection test 3 (blue and green segments)
 ########################################
 xsegs1 = c(0,2)
 ysegs1 = c(0,2)
 xsegs2 = c(1, 3)
 ysegs2 = c(1, 3)
+a = c(xsegs2[[1]],ysegs2[[1]])
+b = c(xsegs2[[2]],ysegs2[[2]])
+c = c(xsegs1[[1]],ysegs1[[1]])
+d = c(xsegs1[[2]],ysegs1[[2]])
+visualize(xsegs1,ysegs1,xsegs2,ysegs2,xlonepoint,ylonepoint)
+two.segment.intersect(a,b,c,d)
+
+########################################
+# intersection test 4 (blue and green segments)
+########################################
+xsegs1 = c(0,2)
+ysegs1 = c(0,2)
+xsegs2 = c(3, 5)
+ysegs2 = c(3, 5)
 a = c(xsegs2[[1]],ysegs2[[1]])
 b = c(xsegs2[[2]],ysegs2[[2]])
 c = c(xsegs1[[1]],ysegs1[[1]])
