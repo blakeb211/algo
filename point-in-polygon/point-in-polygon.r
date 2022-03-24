@@ -57,16 +57,18 @@ two.segment.intersect = function(a, b,c,d) {
     # equal the points of one of the line segments *in reversed order* 
     seg1 = rbind(b,a)
     check2 = sum(seg1 == pts[3:4,]) == 4 || sum(seg1 == pts[1:2,]) == 4
-    if (check1 || check2 == TRUE) {
-      print("case1 intersect not detected")
-    } else {
+    if (check1 && check2 == FALSE) {
       print("case1 (overlapping segments w/ same angle) intersect detected")
+    } else {
+      print("case1 intersect not detected")
     }
-  }
+  } else {
+      print("case1 intersect not detected")
+    }
   # Case 2: line segments have a common vertex that is
   # the only intersection point
   # check if a == c, a == d, b == c, or b == d
-  if (a == c || a == d || b == c || b == d) {
+  if (sum(a == c) == 2 || sum(a == d) == 2 || sum(b == c) == 2 || sum(b == d) == 2) {
     print("case2 (shared vertex) intersect detected")
   } else {
     print("case2 intersect not detected")
