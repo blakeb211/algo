@@ -35,27 +35,45 @@ two.segment.intersect = function(a, b,c,d) {
   case2 = FALSE
   case3 = FALSE
   EPSILON = 1e-9
-  # Case 1
+  # Case 1 - both line segments fall on same line and overlap
   # do vec cross product
   # sort points by x and y
   # check if other segment's point occurs before second point
   # of first segment
   if (abs(cross(b-a, d-c)) < EPSILON) {
+    # sort pts
     pts = rbind(a,b,c,d) 
-    sort(pts)
-    print(pts)
+    pts = data.frame(pts)
+    colnames(pts) = c("x","y")
+    pts = pts[order(pts$y, decreasing = TRUE), ]
+    pts = pts[order(pts$x, decreasing = TRUE), ]
+    # check if either first two points or last two points
+    # equal the points of one of the line segments
+    seg1 = rbind(a,b)
+    check1 = sum(seg1 == pts[3:4,]) == 4 || sum(seg1 == pts[1:2,]) == 4
+    # check if either first two points or last two points
+    # equal the points of one of the line segments *in reversed order* 
+    seg1 = rbind(b,a)
+    check2 = sum(seg1 == pts[3:4,]) == 4 || sum(seg1 == pts[1:2,]) == 4
+    if (check1 || check2 == TRUE) {
+      print("case1 intersect not detected")
+    } else {
+      print("case1 intersect detected")
+    }
   }
+  # Case 2: line segments have a common vertex that is
+  # the only intersection point
   
 }
 
 #######################################
 # Setup the data
 #######################################
-xsegs1 = c(1, 3)
-ysegs1 = c(1, 3)
+xsegs1 = c(3, 1)
+ysegs1 = c(3, 1)
 df1 = cbind(xsegs1, ysegs1) %>% data.frame
-xsegs2 = c(2, 4)
-ysegs2 = c(2, 4)
+xsegs2 = c(4, 5)
+ysegs2 = c(4, 5)
 df2 = cbind(xsegs2, ysegs2) %>% data.frame
 
 xlonepoint = c(2.5)
@@ -64,12 +82,10 @@ df3 = c(xlonepoint,ylonepoint) %>% t %>% data.frame
 colnames(df3) = c("xlonepoint","ylonepoint")
 p = c(xlonepoint,ylonepoint)
 
-xpoly = c(1, 1, 1, 1)
-ypoly = c(1, 1, 1, 1)
 
 #########################################
-# Demo 1: which side of blue line is red 
-#         point on
+# which side of blue line is red 
+# point on
 #########################################
 s1 = c(xsegs2[[1]],ysegs2[[1]])
 s2 = c(xsegs2[[2]],ysegs2[[2]])
@@ -78,6 +94,19 @@ cat("result =", is_on_left(p,s1,s2), "\n")
 cat("Demo2: is_on_right(p,s1,s2)\nexpected = FALSE")
 cat("result =", is_on_right(p,s1,s2), "\n")
 
+########################################
+# intersection test
+########################################
+a = s1
+b = s2
+c = c(xsegs1[[1]],ysegs1[[1]])
+d = c(xsegs1[[2]],ysegs1[[2]])
+two.segment.intersect(a,b,c,d)
+########################################
+# Segment intersect polygon
+########################################
+xpoly = c(1, 1, 1, 1)
+ypoly = c(1, 1, 1, 1)
 #######################################
 # Visualize result
 #######################################
