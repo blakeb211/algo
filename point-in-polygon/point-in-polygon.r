@@ -197,5 +197,8 @@ two.segment.intersect(a,b,c,d)
 ########################################
 # Segment intersect polygon
 ########################################
+# add visualization for several segments that do and do not 
+# intersect a polygon; write function that takes a polygon and a segment
+# and says whether it intersects or not
 xpoly = c(1, 1, 1, 1)
 ypoly = c(1, 1, 1, 1)
