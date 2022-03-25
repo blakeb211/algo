@@ -267,7 +267,7 @@ p1 = c(4, 2)
 p2 = c(1, 0)
 visualize.poly(polydf, list(p1, p2))
 
-is.point.inside.poly(poly,pt) {
+is.point.inside.poly = function(poly,pt) {
 # Pick arbitrary direction.
 # Cast a ray by building a segment from the point in arbitrary direction
 # with a very long length.
