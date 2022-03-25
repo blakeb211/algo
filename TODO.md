@@ -1,5 +1,7 @@
 ## TODO
   - R version of point-in-polygon algo
+    - refactor interfaces, remove duplication
+    - write is.point.inside() function 
 
 ## IMPROVEMENTS
   - left hand turn function of convexhull could be simplified 
