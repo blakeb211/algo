@@ -266,3 +266,14 @@ polydf = data.frame(cbind(xs, ys))
 p1 = c(4, 2)
 p2 = c(1, 0)
 visualize.poly(polydf, list(p1, p2))
+
+is.point.inside.poly(poly,pt) {
+# Pick arbitrary direction.
+# Cast a ray by building a segment from the point in arbitrary direction
+# with a very long length.
+# Loop through polygon segments and add 1 to a counter for each segment
+# that the ray intersects.
+# If the counter is 0,2,4, etc then the point is outside the polygon.
+# if the counter is 1,3,5, etc then the point is inside the polygon.
+
+}
