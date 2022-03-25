@@ -90,12 +90,13 @@ two.segment.intersect = function(a, b,c,d) {
 }
 
 #######################################
-# Visualize result
+# Visualize functions 
 #######################################
 visualize.segments = function(xsegs1, ysegs1, xsegs2, ysegs2,xlonepoint,ylonepoint) {
 df1 = cbind(xsegs1, ysegs1) %>% data.frame
 df2 = cbind(xsegs2, ysegs2) %>% data.frame
 df3 = c(xlonepoint,ylonepoint) %>% t %>% data.frame
+colnames(df3) = c("xlonepoint","ylonepoint")
 ptcol = c("1" = "springgreen3", "2" = "blue4", "3" = "orangered3")
 ggplot() +
   xlim(c(-3, 10)) +
@@ -119,6 +120,40 @@ ggplot() +
   xlab("x coord") + ylab("y coord") +
   scale_color_manual(values = ptcol) 
 }
+
+# visualize polygon and several points
+# polydf is a data.frame of points with x in the first col and y in the second
+# pts is a list of 2-vectors with each point given as (x,y)
+visualize.poly = function(polydf, pts) {
+  stopifnot(pts %>% class == "list")
+  stopifnot(length(pts[[1]])==2)
+  # change pts data into a data.frame in the right format for ggplot
+  pts = data.frame(pts %>% data.frame %>% t)
+  colnames(pts) = c("x","y")
+  ptcol = c("1" = "springgreen3", "2" = "blue4", 
+            "3" = "orangered3", "4" = "mediumorchid",
+            "5" = "khaki4")
+  ggplot() +
+    xlim(c(-3, 10)) +
+    ylim(c(-3, 10)) +
+    layer(
+      data = polydf, 
+      mapping = aes(x = xs, y =ys, color = "5"),
+      stat = "identity",
+      position = "identity",
+      geom = "path"
+    ) +
+    scale_color_manual(values = ptcol) +
+    layer(
+      data = pts,
+      mapping = aes(x = x, y = y, color = "4"),
+      stat = "identity",
+      position = "identity",
+      geom = "point"
+    ) +
+    theme(legend.position = "none") +
+    xlab("x coord") + ylab("y coord")
+}
 #########################################
 # which side of blue line is red 
 # point on
@@ -129,10 +164,10 @@ xsegs2 = c(2, 5)
 ysegs2 = c(2, 5)
 xlonepoint = c(2.5)
 ylonepoint = c(4)
-colnames(df3) = c("xlonepoint","ylonepoint")
 p = c(xlonepoint,ylonepoint)
 s1 = c(xsegs2[[1]],ysegs2[[1]])
 s2 = c(xsegs2[[2]],ysegs2[[2]])
+visualize.segments(xsegs1,ysegs1,xsegs2,ysegs2,xlonepoint,ylonepoint)
 cat("Demo1: is_on_left(p,s1,s2)\nexpected = TRUE")
 cat("result =", is_on_left(p,s1,s2), "\n")
 cat("Demo2: is_on_right(p,s1,s2)\nexpected = FALSE")
@@ -141,16 +176,11 @@ cat("result =", is_on_right(p,s1,s2), "\n")
 ########################################
 # intersection test - non-vertex intersect
 ########################################
-xsegs1 = c(3, 5)
-ysegs1 = c(4, 1)
-xsegs2 = c(2, 5)
-ysegs2 = c(2, 5)
 a = c(xsegs2[[1]],ysegs2[[1]])
 b = c(xsegs2[[2]],ysegs2[[2]])
 c = c(xsegs1[[1]],ysegs1[[1]])
 d = c(xsegs1[[2]],ysegs1[[2]])
 two.segment.intersect(a,b,c,d)
-visualize.segments(xsegs1,ysegs1,xsegs2,ysegs2,xlonepoint,ylonepoint)
 
 ########################################
 # intersection test - shared vertex 
@@ -194,15 +224,15 @@ d = c(xsegs1[[2]],ysegs1[[2]])
 visualize.segments(xsegs1,ysegs1,xsegs2,ysegs2,xlonepoint,ylonepoint)
 two.segment.intersect(a,b,c,d)
 
+
 ########################################
-# Segment intersect polygon
+# Point inside polygon
 ########################################
-# add visualization for several segments that do and do not 
-# intersect a polygon; write function that takes a polygon and a segment
-# and says whether it intersects or not
-xs = strsplit("1 1 1 1",' ') %>% unlist %>% as.double
-ys = strsplit("2 4 3 2", ' ') %>% unlist %>% as.double
-xpoly
-ypoly
-data.frame(cbind(xpoly,ypoly))
-visualize.poly = function() {}
+xs = strsplit("2 1 4 5 5 3.5 +1 3 0 2", ' ') %>% unlist %>% as.double
+ys = strsplit("2 5 4 2 0 1.5 -1 2 0 2", ' ') %>% unlist %>% as.double
+polydf = data.frame(cbind(xs,ys))
+# test points constructed as xy 
+p1 = c(4,2) 
+p2 = c(1,0)
+visualize.poly(polydf, list(p1,p2))
+
