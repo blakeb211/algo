@@ -92,6 +92,12 @@ two.segment.intersect = function(a, b,c,d) {
 #######################################
 # Visualize functions 
 #######################################
+
+# Draw 2 segments and a lone point for testing segment intersection 
+# and cross functions. Note that the segments are given in ggplot 
+# format as lists of xs and ys rather than paired as points. 
+# This could easily be refactored to pass in a data.frame or a list 
+# of points instead.
 visualize.segments = function(xsegs1, ysegs1, xsegs2, ysegs2,xlonepoint,ylonepoint) {
 df1 = cbind(xsegs1, ysegs1) %>% data.frame
 df2 = cbind(xsegs2, ysegs2) %>% data.frame
