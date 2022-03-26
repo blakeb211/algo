@@ -302,4 +302,6 @@ is.point.inside.poly(polydf, p2) # should be FALSE
 
 # check two segment intersect on 
 # checking if [ 4 2 , 14 2 ] intersects [ 4 4 , 5 2 ]
+two.segment.intersect(c(4,2),c(14,2), c(4,4),c(5,2))
 # checking if [ 4 2 , 14 2 ] intersects [ 5 2 , 5 0 ]
+two.segment.intersect(c(4,2),c(14,2), c(5,2),c(5,0))
