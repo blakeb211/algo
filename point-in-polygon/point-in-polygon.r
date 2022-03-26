@@ -285,11 +285,13 @@ visualize.segments(xsegs1, ysegs1, xsegs2, ysegs2, xlonepoint, ylonepoint)
 two.segment.intersect(a, b, c, d)
 
 #########################################
-# Unaddressed corner case
+# Note:  
 #########################################
-# TODO: There is an unaddressed corner case when two segments intersect at
-# one of their vertices but dont share a common vertex. This is shown by
-# the following
+# When two segments intersect at one of their vertices but dont share a common vertex, it is not counted as intersecting.
+# This is a correct part of the algorithm but
+# in practice it means one needs to case multiple rays
+# to ensure that you don't incorrectly report a FALSE
+# when it should be a true.
 two.segment.intersect(c(4,2),c(14,2), c(4,4),c(5,2))
 
 
