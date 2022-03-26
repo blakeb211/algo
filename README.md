@@ -10,6 +10,7 @@
    point is on.
    - R            : complete
    - C++          : in progress
+   <img src="screenshots/point-in-polygon/1.png" width=50% height=50%>
 
 ## Build instructions
    For R examples, either open in RStudio, or open file in R by typing:
