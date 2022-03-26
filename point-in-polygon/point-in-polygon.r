@@ -50,28 +50,28 @@ two.segment.intersect = function(a, b, c, d) {
     pts = rbind(a, b, c, d)
     pts = data.frame(pts)
     colnames(pts) = c("x", "y")
-    pts = pts[order(pts$y, decreasing = TRUE),]
-    pts = pts[order(pts$x, decreasing = TRUE),]
+    pts = pts[order(pts$y, decreasing = TRUE), ]
+    pts = pts[order(pts$x, decreasing = TRUE), ]
     # check if either first two points or last two points
     # equal the points of one of the line segments
     # @NOTE: this == should be fine since we are doing equality of
     # a float with itself, not a float with a different float
     seg1 = rbind(a, b)
-    check1 = sum(seg1 == pts[3:4, ]) == 4 ||
-      sum(seg1 == pts[1:2, ]) == 4
+    check1 = sum(seg1 == pts[3:4,]) == 4 ||
+      sum(seg1 == pts[1:2,]) == 4
     # check if either first two points or last two points
     # equal the points of one of the line segments *in reversed order*
     seg1 = rbind(b, a)
-    check2 = sum(seg1 == pts[3:4, ]) == 4 ||
-      sum(seg1 == pts[1:2, ]) == 4
+    check2 = sum(seg1 == pts[3:4,]) == 4 ||
+      sum(seg1 == pts[1:2,]) == 4
     if (check1 || check2 == TRUE) {
-      print("case1 intersect not detected")
+      # print("case1 intersect not detected")
     } else {
       print("case1 (overlapping segments w/ same angle) intersect detected")
       case1 = TRUE
     }
   } else {
-    print("case1 intersect not detected")
+    # print("case1 intersect not detected")
   }
   # Case 2: line segments have a common vertex that is
   # the only intersection point
@@ -81,7 +81,7 @@ two.segment.intersect = function(a, b, c, d) {
     print("case2 (shared vertex) intersect detected")
     case2 = TRUE
   } else {
-    print("case2 intersect not detected")
+    # print("case2 intersect not detected")
   }
   # Case 3: a--b and c--d intersect at exactly one
   # non-vertex point
@@ -95,7 +95,7 @@ two.segment.intersect = function(a, b, c, d) {
     print("case3 non-vertex intersect at single point")
     case3 = TRUE
   } else {
-    print("case3 intersect not detected")
+    # print("case3 intersect not detected")
   }
   if (case1 || case2 || case3) {
     return(TRUE)
@@ -267,13 +267,39 @@ p1 = c(4, 2)
 p2 = c(1, 0)
 visualize.poly(polydf, list(p1, p2))
 
-is.point.inside.poly = function(poly,pt) {
-# Pick arbitrary direction.
-# Cast a ray by building a segment from the point in arbitrary direction
-# with a very long length.
-# Loop through polygon segments and add 1 to a counter for each segment
-# that the ray intersects.
-# If the counter is 0,2,4, etc then the point is outside the polygon.
-# if the counter is 1,3,5, etc then the point is inside the polygon.
+is.point.inside.poly = function(poly, pt) {
+  # Pick arbitrary direction.
+  # Cast a ray by building a segment from the point in arbitrary direction
+  # with a very long length.
+  # Loop through polygon segments and add 1 to a counter for each segment
+  # that the ray intersects.
+  # If the counter is 0,2,4, etc then the point is outside the polygon.
+  # if the counter is 1,3,5, etc then the point is inside the polygon.
+  ray = list(pt, pt + c(10, 0))
+  # 1 2 3 4 5 6 7 8 9 10
+  #  - - - - - - - - -
+  count = 0 
+  for (i in 1:(length(poly[, 1]) - 1)) {
+    cat("checking if [", ray[[1]], ",", ray[[2]], "] intersects ")
+    cat("[", unlist(poly[i, ]), ",", unlist(poly[i +1, ]), "]\n")
+     
+    if (two.segment.intersect(ray[[1]], ray[[2]], 
+                          unlist(poly[i, ]), unlist(poly[i +1, ]))) {
+      count = count + 1
+    }
+  }
+  
+  if (count %% 2 == 0)  { cat("count is ", count, "\n"); return(TRUE) }
+  cat("count is ", count, "\n");
+  return(FALSE)
+} 
 
-}
+########################################
+# Test if purple points are inside polygon
+########################################
+is.point.inside.poly(polydf, p1) # should be TRUE 
+is.point.inside.poly(polydf, p2) # should be FALSE
+
+# check two segment intersect on 
+# checking if [ 4 2 , 14 2 ] intersects [ 4 4 , 5 2 ]
+# checking if [ 4 2 , 14 2 ] intersects [ 5 2 , 5 0 ]
