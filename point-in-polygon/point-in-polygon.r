@@ -185,6 +185,35 @@ visualize.poly = function(polydf, pts) {
     theme(legend.position = "none") +
     xlab("x coord") + ylab("y coord")
 }
+
+# Determine if a given point is *inside* or *outside* of a polygon
+is.point.inside.poly = function(poly, pt) {
+  # Pick arbitrary direction.
+  # Cast a ray by building a segment from the point in arbitrary direction
+  # with a very long length.
+  # Loop through polygon segments and add 1 to a counter for each segment
+  # that the ray intersects.
+  # If the counter is 0,2,4, etc then the point is outside the polygon.
+  # if the counter is 1,3,5, etc then the point is inside the polygon.
+  ray = list(pt, pt + c(10, 0)) # select zero degree direction
+  # 1 2 3 4 5 6 7 8 9 10
+  #  - - - - - - - - -
+  count = 0 
+  for (i in 1:(length(poly[, 1]) - 1)) {
+    # cat("checking if [", ray[[1]], ",", ray[[2]], "] intersects ")
+    # cat("[", unlist(poly[i, ]), ",", unlist(poly[i +1, ]), "]\n")
+    
+    if (two.segment.intersect(ray[[1]], ray[[2]], 
+                              unlist(poly[i, ]), unlist(poly[i +1, ]))) {
+      count = count + 1
+    }
+  }
+  
+  if (count %% 2 == 0)  { cat("count is ", count, "\n"); return(FALSE) }
+  cat("count is ", count, "\n");
+  return(TRUE)
+} 
+
 #########################################
 # which side of blue line is red
 # point on
@@ -255,44 +284,25 @@ d = c(xsegs1[[2]], ysegs1[[2]])
 visualize.segments(xsegs1, ysegs1, xsegs2, ysegs2, xlonepoint, ylonepoint)
 two.segment.intersect(a, b, c, d)
 
+#########################################
+# Unaddressed corner case
+#########################################
+# TODO: There is an unaddressed corner case when two segments intersect at
+# one of their vertices but dont share a common vertex. This is shown by
+# the following
+two.segment.intersect(c(4,2),c(14,2), c(4,4),c(5,2))
+
 
 ########################################
 # Point inside polygon
 ########################################
-xs = strsplit("2 1 4 5 5 3.5 +1 3 0 2", ' ') %>% unlist %>% as.double
-ys = strsplit("2 5 4 2 0 1.5 -1 2 0 2", ' ') %>% unlist %>% as.double
+xs = strsplit("2 1 4 5 +5. 3.5 +1 3 0 2", ' ') %>% unlist %>% as.double
+ys = strsplit("2 5 4 1.9 0 1.5 -1 2 0 2", ' ') %>% unlist %>% as.double
 polydf = data.frame(cbind(xs, ys))
 # test points constructed as xy
 p1 = c(4, 2)
 p2 = c(1, 0)
 visualize.poly(polydf, list(p1, p2))
-
-is.point.inside.poly = function(poly, pt) {
-  # Pick arbitrary direction.
-  # Cast a ray by building a segment from the point in arbitrary direction
-  # with a very long length.
-  # Loop through polygon segments and add 1 to a counter for each segment
-  # that the ray intersects.
-  # If the counter is 0,2,4, etc then the point is outside the polygon.
-  # if the counter is 1,3,5, etc then the point is inside the polygon.
-  ray = list(pt, pt + c(10, 0))
-  # 1 2 3 4 5 6 7 8 9 10
-  #  - - - - - - - - -
-  count = 0 
-  for (i in 1:(length(poly[, 1]) - 1)) {
-    cat("checking if [", ray[[1]], ",", ray[[2]], "] intersects ")
-    cat("[", unlist(poly[i, ]), ",", unlist(poly[i +1, ]), "]\n")
-     
-    if (two.segment.intersect(ray[[1]], ray[[2]], 
-                          unlist(poly[i, ]), unlist(poly[i +1, ]))) {
-      count = count + 1
-    }
-  }
-  
-  if (count %% 2 == 0)  { cat("count is ", count, "\n"); return(TRUE) }
-  cat("count is ", count, "\n");
-  return(FALSE)
-} 
 
 ########################################
 # Test if purple points are inside polygon
@@ -300,8 +310,3 @@ is.point.inside.poly = function(poly, pt) {
 is.point.inside.poly(polydf, p1) # should be TRUE 
 is.point.inside.poly(polydf, p2) # should be FALSE
 
-# check two segment intersect on 
-# checking if [ 4 2 , 14 2 ] intersects [ 4 4 , 5 2 ]
-two.segment.intersect(c(4,2),c(14,2), c(4,4),c(5,2))
-# checking if [ 4 2 , 14 2 ] intersects [ 5 2 , 5 0 ]
-two.segment.intersect(c(4,2),c(14,2), c(5,2),c(5,0))
