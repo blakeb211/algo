@@ -1,11 +1,15 @@
 ## Demonstrations of different interesting algorithms
 1. Andrew's Algorithm for finding the polygon that outlines or bounds
    a set of a points.
-   - R version   : complete
-   - C++ version : working 
+   - R            : complete
+   - C++          : working 
    <img src="screenshots/convexhull/1.png" width=50% height=50%>
 2. Point-in-polygon algorithm for quickly determining if a point
-   is contained within a given polygon.
+   is contained within a given polygon. Contains segment-segment
+   intersection test and test for which side of a line that a 
+   point is on.
+   - R            : complete
+   - C++          : in progress
 
 ## Build instructions
    For R examples, either open in RStudio, or open file in R by typing:
