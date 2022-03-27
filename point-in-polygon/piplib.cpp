@@ -40,8 +40,9 @@ auto is_inside(const P pt, const Poly poly) -> bool {
   //  that the ray intersects.
   //  If the counter is 0, 2, 4, etc then the point is outside the polygon.
   //  if the counter is 1, 3, 5, etc then the point is inside the polygon.
+  constexpr C RAYLENGTH = 2000.0; // make ray longer than any screen would be
   P ray_st = pt;
-  P ray_end = pt + P{40, 0};  // pick 0 degree direction
+  P ray_end = pt + P{RAYLENGTH, 0};  // pick 0 degree direction
   //   1 2 3 4 5 6 7 8 9 10
   //  - - - - - - - - -
   size_t count = 0;
@@ -54,9 +55,10 @@ auto is_inside(const P pt, const Poly poly) -> bool {
   }
   // check last line c----a (last point of poly to first point of poly)
   if (are_intersecting(ray_st, ray_end, poly[sz - 1], poly[0]))
+    count = count + 1;
 
-    if (count % 2 == 0) {
-      return false;
-    }
+  if (count % 2 == 0) {
+    return false;
+  }
   return true;
 }

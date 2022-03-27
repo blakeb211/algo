@@ -3,7 +3,7 @@
 
 /* Visual demonstration of the point-in-polygon algorithm.
  * Generate a few random polys that bounce around the screen.
- * Generate bullets drawn as little circles that come from
+ * Generate bombs drawn as little circles that come from
  * the top of the screen and destroy the polygons when they
  * collide with (i.e. are inside of) them.
  */
@@ -14,10 +14,11 @@ using std::cout, std::endl, std::vector, std::polar, std::arg;
 // globals
 //////////////////////////////////////////////////////////////
 constexpr size_t NUM_PT = 11;
-constexpr float SCALE = 2;
+constexpr float SCALE = 4;
 constexpr int WINDIM = 800;
-constexpr int NUM_POLY = 10;
-vector<P> bullets;
+constexpr size_t NUM_POLY = 12;
+constexpr size_t NUM_BOMB = 6;
+vector<P> bombs;
 vector<Poly> polys;
 vector<bool> poly_draw_flag;
 
@@ -37,7 +38,7 @@ P create_rand_pt(int first, int last) {
 auto generate_poly() -> Poly {
   Poly tmp;
   const int nvert = rand_num(3, 10);
-  const double rad = 15.0;  // set poly scale
+  const double rad = 30.0/SCALE;  // set poly scale
   const double d_ang = 2 * M_PI / nvert;
   for (int i = 0; i < nvert; i++) {
     P _p = polar(rad, d_ang * (i + 1));
@@ -56,15 +57,32 @@ auto shift_poly(Poly poly, const P shift) -> Poly {
   return poly;
 }
 
-auto generate_bullet() -> P {
+auto generate_bomb() -> P {
   const C x = rand_num(WINDIM / SCALE * 0.10, WINDIM / SCALE * 0.90);
-  return P{x, 10};
+  return P{x, WINDIM / SCALE - rand_num(3, 10)};
 }
 
+auto update_bombs() -> void {
+  for (auto& b : bombs) {
+    b = b + P{0.0, -1.0};
+    if (b.Y <= 0.0) b = generate_bomb();
+  }
+}
+
+auto check_collisions() -> void {
+for (auto & b : bombs) {
+  for (size_t poly_idx = 0; poly_idx < NUM_POLY; poly_idx++) {
+    if (is_inside(b, polys[poly_idx])) {
+      poly_draw_flag[poly_idx] = false;
+    }
+  }
+}
+
+}
 //////////////////////////////////////////////////////////////
 // main function
 //////////////////////////////////////////////////////////////
-int main(int argc, char* argv[]) {
+auto main(int argc, char* argv[]) -> int {
   // random points
   srand(time(NULL));
 
@@ -74,6 +92,7 @@ int main(int argc, char* argv[]) {
   polys.resize(NUM_POLY);
   poly_draw_flag.resize(NUM_POLY);
   std::fill(poly_draw_flag.begin(), poly_draw_flag.end(), true);
+  bombs.resize(NUM_BOMB);
 
   // generate polygons
   for (auto& p : polys) {
@@ -81,6 +100,11 @@ int main(int argc, char* argv[]) {
     const C xshift = rand_num(WINDIM / SCALE * 0.10, WINDIM / SCALE * 0.90);
     const C yshift = rand_num(WINDIM / SCALE * 0.10, WINDIM / SCALE * 0.75);
     p = shift_poly(p, P{xshift, yshift});
+  }
+
+  // generate falling bombs
+  for (auto& b : bombs) {
+    b = generate_bomb();
   }
 
   // create window and draw solution
@@ -94,7 +118,9 @@ int main(int argc, char* argv[]) {
 
       SDL_RenderSetScale(renderer, SCALE, SCALE);
 
+      // main loop
       while (!done) {
+        update_bombs();
         SDL_Event event;
 
         SDL_SetRenderDrawColor(renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
@@ -119,11 +145,22 @@ int main(int argc, char* argv[]) {
                              round(p[0].X),
                              round(WINDIM / SCALE) - round(p[0].Y));
         }
-        // draw the bullets so they are on top
-        //     SDL_SetRenderDrawColor(renderer, 255, 255, 255,
-        //     SDL_ALPHA_OPAQUE); for (int i = 0; i < NUM_PT; i++)
-        //       SDL_RenderDrawPoint(renderer, pts[i].x,
-        //       WINDIM/SCALE-pts[i].y);
+        // draw the bombs so they are on top
+        for (size_t bi = 0; bi < NUM_BOMB; bi++) {
+          SDL_SetRenderDrawColor(renderer, 255, 255, 255, SDL_ALPHA_OPAQUE);
+          SDL_RenderDrawPoint(renderer, round(bombs[bi].X),
+                              round(WINDIM / SCALE) - round(bombs[bi].Y + 2));
+          SDL_RenderDrawPoint(renderer, round(bombs[bi].X),
+                              round(WINDIM / SCALE) - round(bombs[bi].Y - 2));
+          SDL_RenderDrawPoint(renderer, round(bombs[bi].X + 2),
+                              round(WINDIM / SCALE) - round(bombs[bi].Y));
+          SDL_RenderDrawPoint(renderer, round(bombs[bi].X - 2),
+                              round(WINDIM / SCALE) - round(bombs[bi].Y));
+          SDL_SetRenderDrawColor(renderer, 255, 0, 0, SDL_ALPHA_OPAQUE);
+          SDL_RenderDrawPoint(renderer, round(bombs[bi].X),
+                              round(WINDIM / SCALE) - round(bombs[bi].Y));
+        }
+
         SDL_RenderPresent(renderer);
 
         while (SDL_PollEvent(&event)) {
@@ -131,7 +168,12 @@ int main(int argc, char* argv[]) {
             done = SDL_TRUE;
           }
         }
-      }
+        check_collisions();
+        SDL_Delay(16);
+        // exit if all polygons destroyed
+        if (std::accumulate(poly_draw_flag.begin(), poly_draw_flag.end(),0) == 0)
+          break;
+      }  // end of main loop
     }
 
     if (renderer) {
