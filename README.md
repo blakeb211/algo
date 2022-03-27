@@ -9,7 +9,8 @@
    intersection test and test for which side of a line that a 
    point is on.
    - R            : complete
-   - C++          : in progress
+   - C++          : complete
+   <img src="screenshots/point-in-polygon/1.png" width=50% height=50%>
    <img src="screenshots/point-in-polygon/1.png" width=50% height=50%>
 
 ## Build instructions
