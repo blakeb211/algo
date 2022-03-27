@@ -43,14 +43,14 @@ auto generate_poly() -> Poly {
     P _p = polar(rad, d_ang * (i + 1));
     tmp.push_back(_p);
   }
-  assert(tmp.size() == nvert);
+  assert(tmp.size() == (size_t)nvert);
   return tmp;
 }
 
 // shift all points of polygon by a point
 auto shift_poly(Poly poly, const P shift) -> Poly {
   const auto sz = poly.size();
-  for (int i = 0; i < sz; i++) {
+  for (size_t i = 0; i < sz; i++) {
     poly[i] += shift;
   }
   return poly;
@@ -103,12 +103,12 @@ int main(int argc, char* argv[]) {
         // Draw polygons
         // number of lines drawn equals number of vertices
         SDL_SetRenderDrawColor(renderer, 10, 250, 10, SDL_ALPHA_OPAQUE);
-        for (int poly_idx = 0; poly_idx < NUM_POLY; poly_idx++) {
+        for (size_t poly_idx = 0; poly_idx < NUM_POLY; poly_idx++) {
           if (!poly_draw_flag[poly_idx]) continue;
           const auto& p = polys[poly_idx];
           const auto sz = p.size();
           // draw sz-1 lines a---b---c
-          for (int i = 0; i < sz - 1; i++) {
+          for (size_t i = 0; i < sz - 1; i++) {
             SDL_RenderDrawLine(
                 renderer, round(p[i].X), round(WINDIM / SCALE) - round(p[i].Y),
                 round(p[i + 1].X), round(WINDIM / SCALE) - round(p[i + 1].Y));

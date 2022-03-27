@@ -7,6 +7,9 @@ project(pip)
 list(APPEND EXTRA_LIBS SDL2main SDL2)
 list(APPEND EXTRA_INCLUDES "/usr/include/SDL2")
 
+SET(GCC_COVERAGE_COMPILE_FLAGS "-Wall -pedantic")
+SET(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} ${GCC_COVERAGE_COMPILE_FLAGS}")
+
 # add main executable
 add_executable(pip main.cpp piplib.cpp)
 set_property(TARGET pip PROPERTY CXX_STANDARD 17)
