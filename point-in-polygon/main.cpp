@@ -5,33 +5,40 @@
  * Generate a few random polys that bounce around the screen.
  * Generate bullets drawn as little circles that come from
  * the top of the screen and destroy the polygons when they
- * are collide with (i.e. are inside of) them.
+ * collide with (i.e. are inside of) them.
  */
 
 using std::cout, std::endl, std::vector, std::polar, std::arg;
 
 //////////////////////////////////////////////////////////////
-// Functions that are only in this file, not the pip library 
-//////////////////////////////////////////////////////////////
-auto generate_poly() -> Poly;
-auto generate_bullet() -> P;
-
-auto test1() -> void {
-  P a{1.0, 2.0};
-  P b{2.5, 40.3};
-  cout << "a: " << a << "b: " << b << endl;
-  cout << "a + b" << a + b << endl;
-  cout << "cross(a,b) : " << cross(a, b) << endl;
-}
-
-//////////////////////////////////////////////////////////////
 // globals
 //////////////////////////////////////////////////////////////
-inline constexpr size_t NUM_PT = 11;
-inline constexpr float SCALE = 8;
-inline constexpr int WINDIM = 800;
+constexpr size_t NUM_PT = 11;
+constexpr float SCALE = 2;
+constexpr int WINDIM = 800;
 vector<P> bullets;
 vector<Poly> polys;
+
+//////////////////////////////////////////////////////////////
+// Functions that are only in this file, not the pip library 
+//////////////////////////////////////////////////////////////
+int rand_num(const int lower, const int upper) {
+  return ( rand() % (upper - lower + 1)) + lower; 
+}
+
+P create_rand_pt(int first, int last) {
+  auto num1 = rand_num(first,last);
+  auto num2 = rand_num(first,last);
+  return P{ static_cast<float>(num1), static_cast<float>(num2) };
+}
+
+auto generate_poly() -> Poly {
+
+}
+
+auto generate_bullet() -> P {
+
+}
 
 //////////////////////////////////////////////////////////////
 // main function
@@ -56,8 +63,8 @@ int main(int argc, char* argv[]) {
 
         SDL_SetRenderDrawColor(renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
         SDL_RenderClear(renderer);
-
-        //    // draw the upper half of the solution
+        
+        // Draw polygons
         //    SDL_SetRenderDrawColor(renderer, 100, 5, 255, SDL_ALPHA_OPAQUE);
         //    auto num_lines = soln1.size() - 1;
         //    // a---b---c----d

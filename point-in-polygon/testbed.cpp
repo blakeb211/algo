@@ -1,11 +1,15 @@
 #include <bits/stdc++.h>
 #include <getopt.h>
-
+#include "piplib.h"
 using std::vector, std::cout, std::stoi, std::endl;
-
+constexpr long double epsilon = 1e-6;
 // function stops program execution if assert fails 
-void test_1() {
-  assert(1);
+auto test1() -> void {
+  P a{1.0, 2.0};
+  P b{2.5, 40.3};
+  P c = a + b;
+  assert(fabs(c.X - 3.5) < epsilon);
+  assert(fabs(c.Y - 42.3) < epsilon);
 }
 
 /*************************************************
@@ -22,9 +26,9 @@ int main(int argc, char *const *argv) {
   while ((c = getopt(argc, argv, "12")) != -1) {
     switch (c) {
       case '1': {
-        cout << "running test_1()" << endl;
+        cout << "running P + P test" << endl;
         // if asserts pass then test succeeded
-        test_1();
+        test1();
         break;
       }
       case '2': {

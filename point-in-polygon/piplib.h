@@ -15,6 +15,7 @@ using P = std::complex<C>;  // point or vector
 #define X real()
 #define Y imag()
 using Poly = std::vector<P>;
+
 // 2d vector cross product
 //  > 0 means 2nd vec turns left if placed at head of first vec
 //  < 0   "                 right           "
