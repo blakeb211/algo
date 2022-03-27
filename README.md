@@ -11,7 +11,7 @@
    - R            : complete
    - C++          : complete
    <img src="screenshots/point-in-polygon/1.png" width=50% height=50%>
-   <img src="screenshots/point-in-polygon/1.png" width=50% height=50%>
+   <img src="screenshots/point-in-polygon/2.png" width=50% height=50%>
 
 ## Build instructions
    For R examples, either open in RStudio, or open file in R by typing:
