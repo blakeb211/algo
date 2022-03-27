@@ -56,7 +56,10 @@ auto shift_poly(Poly poly, const P shift) -> Poly {
   return poly;
 }
 
-auto generate_bullet() -> P { return P{}; }
+auto generate_bullet() -> P {
+  const C x = rand_num(WINDIM / SCALE * 0.10, WINDIM / SCALE * 0.90);
+  return P{x, 10};
+}
 
 //////////////////////////////////////////////////////////////
 // main function
@@ -65,11 +68,11 @@ int main(int argc, char* argv[]) {
   // random points
   srand(time(NULL));
 
-  // preallocate vectors
+  ////////////////////////////////////////////////////////////
+  // init
+  // /////////////////////////////////////////////////////////
   polys.resize(NUM_POLY);
   poly_draw_flag.resize(NUM_POLY);
-  
-  // set poly draw flags to all true
   std::fill(poly_draw_flag.begin(), poly_draw_flag.end(), true);
 
   // generate polygons
@@ -80,7 +83,6 @@ int main(int argc, char* argv[]) {
     p = shift_poly(p, P{xshift, yshift});
   }
 
-  // SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "2");
   // create window and draw solution
   if (SDL_Init(SDL_INIT_VIDEO) == 0) {
     SDL_Window* window = NULL;
@@ -90,7 +92,6 @@ int main(int argc, char* argv[]) {
         0) {
       SDL_bool done = SDL_FALSE;
 
-      // SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "2");
       SDL_RenderSetScale(renderer, SCALE, SCALE);
 
       while (!done) {
@@ -102,15 +103,17 @@ int main(int argc, char* argv[]) {
         // Draw polygons
         // number of lines drawn equals number of vertices
         SDL_SetRenderDrawColor(renderer, 10, 250, 10, SDL_ALPHA_OPAQUE);
-        for (const auto& p : polys) {
+        for (int poly_idx = 0; poly_idx < NUM_POLY; poly_idx++) {
+          if (!poly_draw_flag[poly_idx]) continue;
+          const auto& p = polys[poly_idx];
           const auto sz = p.size();
-          // a---b---c
+          // draw sz-1 lines a---b---c
           for (int i = 0; i < sz - 1; i++) {
             SDL_RenderDrawLine(
                 renderer, round(p[i].X), round(WINDIM / SCALE) - round(p[i].Y),
                 round(p[i + 1].X), round(WINDIM / SCALE) - round(p[i + 1].Y));
           }
-          // c----a
+          // draw last line c----a
           SDL_RenderDrawLine(renderer, round(p[sz - 1].X),
                              round(WINDIM / SCALE) - round(p[sz - 1].Y),
                              round(p[0].X),
