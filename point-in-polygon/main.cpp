@@ -19,6 +19,7 @@ constexpr int WINDIM = 800;
 constexpr int NUM_POLY = 10;
 vector<P> bullets;
 vector<Poly> polys;
+vector<bool> poly_draw_flag;
 
 //////////////////////////////////////////////////////////////
 // Functions that are only in this file, not the pip library
@@ -64,9 +65,14 @@ int main(int argc, char* argv[]) {
   // random points
   srand(time(NULL));
 
-  // generate polygons
+  // preallocate vectors
   polys.resize(NUM_POLY);
+  poly_draw_flag.resize(NUM_POLY);
+  
+  // set poly draw flags to all true
+  std::fill(poly_draw_flag.begin(), poly_draw_flag.end(), true);
 
+  // generate polygons
   for (auto& p : polys) {
     p = generate_poly();  // gen poly centered on 0,0
     const C xshift = rand_num(WINDIM / SCALE * 0.10, WINDIM / SCALE * 0.90);
@@ -74,7 +80,7 @@ int main(int argc, char* argv[]) {
     p = shift_poly(p, P{xshift, yshift});
   }
 
-  SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "2");
+  // SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "2");
   // create window and draw solution
   if (SDL_Init(SDL_INIT_VIDEO) == 0) {
     SDL_Window* window = NULL;
@@ -84,7 +90,7 @@ int main(int argc, char* argv[]) {
         0) {
       SDL_bool done = SDL_FALSE;
 
-      SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "2");
+      // SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "2");
       SDL_RenderSetScale(renderer, SCALE, SCALE);
 
       while (!done) {
@@ -101,13 +107,14 @@ int main(int argc, char* argv[]) {
           // a---b---c
           for (int i = 0; i < sz - 1; i++) {
             SDL_RenderDrawLine(
-                renderer, round(p[i].X), round(WINDIM / SCALE - p[i].Y),
-                round(p[i + 1].X), round(WINDIM / SCALE - p[i + 1].Y));
+                renderer, round(p[i].X), round(WINDIM / SCALE) - round(p[i].Y),
+                round(p[i + 1].X), round(WINDIM / SCALE) - round(p[i + 1].Y));
           }
           // c----a
           SDL_RenderDrawLine(renderer, round(p[sz - 1].X),
-                             round(WINDIM / SCALE - p[sz - 1].Y), round(p[0].X),
-                             round(WINDIM / SCALE - p[0].Y));
+                             round(WINDIM / SCALE) - round(p[sz - 1].Y),
+                             round(p[0].X),
+                             round(WINDIM / SCALE) - round(p[0].Y));
         }
         // draw the bullets so they are on top
         //     SDL_SetRenderDrawColor(renderer, 255, 255, 255,
