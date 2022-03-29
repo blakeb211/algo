@@ -14,7 +14,7 @@ using std::cout, std::endl, std::vector, std::polar, std::arg;
 // globals
 //////////////////////////////////////////////////////////////
 constexpr size_t NUM_PT = 11;
-constexpr float SCALE = 4;
+constexpr float SCALE = 2;
 constexpr int WINDIM = 800;
 constexpr size_t NUM_POLY = 12;
 constexpr size_t NUM_BOMB = 6;
