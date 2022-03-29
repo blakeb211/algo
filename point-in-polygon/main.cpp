@@ -20,6 +20,8 @@ constexpr size_t NUM_POLY = 12;
 constexpr size_t NUM_BOMB = 6;
 vector<P> bombs;
 vector<Poly> polys;
+vector<P> poly_centers;
+vector<C> poly_rot_rate;
 vector<bool> poly_draw_flag;
 
 //////////////////////////////////////////////////////////////
@@ -38,7 +40,7 @@ P create_rand_pt(int first, int last) {
 auto generate_poly() -> Poly {
   Poly tmp;
   const int nvert = rand_num(3, 10);
-  const double rad = 30.0/SCALE;  // set poly scale
+  const double rad = 30.0 / SCALE;  // set poly scale
   const double d_ang = 2 * M_PI / nvert;
   for (int i = 0; i < nvert; i++) {
     P _p = polar(rad, d_ang * (i + 1));
@@ -69,15 +71,30 @@ auto update_bombs() -> void {
   }
 }
 
-auto check_collisions() -> void {
-for (auto & b : bombs) {
+auto rotate_polys() -> void {
   for (size_t poly_idx = 0; poly_idx < NUM_POLY; poly_idx++) {
-    if (is_inside(b, polys[poly_idx])) {
-      poly_draw_flag[poly_idx] = false;
+    for (auto& v : polys[poly_idx]) {
+      // shift vertex to origin by subtracting its center
+      v = v - poly_centers[poly_idx];
+      // apply rotation matrix for 0.01 radians ccw to each vertex
+      const C vx = v.X;
+      const C vy = v.Y;
+      const C rot = poly_rot_rate[poly_idx];
+      v = P{cos(rot) * vx + -sin(rot) * vy, sin(rot) * vx + cos(rot) * vy};
+      // shift vertex back by adding its center
+      v = v + poly_centers[poly_idx];
     }
   }
 }
 
+auto check_collisions() -> void {
+  for (auto& b : bombs) {
+    for (size_t poly_idx = 0; poly_idx < NUM_POLY; poly_idx++) {
+      if (is_inside(b, polys[poly_idx])) {
+        poly_draw_flag[poly_idx] = false;
+      }
+    }
+  }
 }
 //////////////////////////////////////////////////////////////
 // main function
@@ -92,6 +109,10 @@ auto main(int argc, char* argv[]) -> int {
   polys.resize(NUM_POLY);
   poly_draw_flag.resize(NUM_POLY);
   std::fill(poly_draw_flag.begin(), poly_draw_flag.end(), true);
+  poly_centers.resize(NUM_POLY);
+  poly_centers.resize(0);
+  poly_rot_rate.resize(NUM_POLY);
+  poly_rot_rate.resize(0);
   bombs.resize(NUM_BOMB);
 
   // generate polygons
@@ -99,7 +120,23 @@ auto main(int argc, char* argv[]) -> int {
     p = generate_poly();  // gen poly centered on 0,0
     const C xshift = rand_num(WINDIM / SCALE * 0.10, WINDIM / SCALE * 0.90);
     const C yshift = rand_num(WINDIM / SCALE * 0.10, WINDIM / SCALE * 0.75);
+    // move poly to randomly generate spot on screen
     p = shift_poly(p, P{xshift, yshift});
+    // store poly centers for use by rotate
+    poly_centers.push_back(P{xshift, yshift});
+    // store poly rotation rate for use by rotate_polys
+    const C rot = static_cast<C>(rand_num(1, 4)) / 60.0;
+    const int rot_sign = rand_num(1, 2);
+    switch (rot_sign) {
+      case 1:
+        poly_rot_rate.push_back(rot);
+        break;
+      case 2:
+        poly_rot_rate.push_back(-rot);
+        break;
+      default:
+        assert(0);
+    };
   }
 
   // generate falling bombs
@@ -120,6 +157,7 @@ auto main(int argc, char* argv[]) -> int {
 
       // main loop
       while (!done) {
+        rotate_polys();
         update_bombs();
         SDL_Event event;
 
@@ -171,7 +209,8 @@ auto main(int argc, char* argv[]) -> int {
         check_collisions();
         SDL_Delay(16);
         // exit if all polygons destroyed
-        if (std::accumulate(poly_draw_flag.begin(), poly_draw_flag.end(),0) == 0)
+        if (std::accumulate(poly_draw_flag.begin(), poly_draw_flag.end(), 0) ==
+            0)
           break;
       }  // end of main loop
     }
