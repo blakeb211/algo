@@ -8,3 +8,8 @@
     (at least in terms of explanation if not computation) using 
     a 2d vector cross product (x1y2 - x2y1)
   - @convexhull add additional tests to c++ version
+  - @all improve ease of cross-platform compilation
+      - replace bits/stdc++ header with my own version
+      - remove getopt.h dependency
+      - include commented out example of changes to CMakeLists for mswin
+      
